@@ -109,122 +109,124 @@
 
     document.body.appendChild(canvas);
 
-    c = canvas.getContext('2d');
+    draw = function () {
+        c = canvas.getContext('2d');
 
-    c.fillStyle = logo.background();
-    c.fillRect(0, 0, canvas.width, canvas.height);
+        c.fillStyle = logo.background();
+        c.fillRect(0, 0, canvas.width, canvas.height);
 
-    var pixelRatio = 1,
-        hHeight = c.canvas.height >> 1,
-        hWidth = c.canvas.width >> 1;
+        var pixelRatio = 1,
+            hHeight = c.canvas.height >> 1,
+            hWidth = c.canvas.width >> 1;
 
 
-    rOuter = h / 2;
-    rInner = 5 / 14 * h; // = ((5/7) * h / 2)
-    outerAngle = Math.acos(6/7);
+        rOuter = h / 2;
+        rInner = 5 / 14 * h; // = ((5/7) * h / 2)
+        outerAngle = Math.acos(6/7);
 
-    //move to the centre of the canvas
-    c.save();
-    c.translate(hWidth, hHeight);
+        //move to the centre of the canvas
+        c.save();
+        c.translate(hWidth, hHeight);
 
-    //Draw the X//
-    //draw the lower outer left arc
-    x      = -(3 * h / 7);
-    y      = 0;
-    sAngle = Math.PI / 2;
-    eAngle = outerAngle;
+        //Draw the X//
+        //draw the lower outer left arc
+        x      = -(3 * h / 7);
+        y      = 0;
+        sAngle = Math.PI / 2;
+        eAngle = outerAngle;
 
-    c.beginPath();
-    c.arc(x, y, rOuter, sAngle, eAngle, true);
+        c.beginPath();
+        c.arc(x, y, rOuter, sAngle, eAngle, true);
 
-    //draw the lower outer right arc
-    sAngle = Math.PI - outerAngle;
-    eAngle = Math.PI / 2;
+        //draw the lower outer right arc
+        sAngle = Math.PI - outerAngle;
+        eAngle = Math.PI / 2;
 
-    c.arc(-x, y, rOuter, sAngle, eAngle, true);
+        c.arc(-x, y, rOuter, sAngle, eAngle, true);
 
-    //draw bottom right stem
-    x = rOuter - (h / 14);
-    c.lineTo(x, rInner);
+        //draw bottom right stem
+        x = rOuter - (h / 14);
+        c.lineTo(x, rInner);
 
-    //draw inner right arc
-    sAngle = Math.PI / 2;
-    eAngle = 3 * Math.PI / 2;
-    c.arc(x, y, rInner, sAngle, eAngle);
+        //draw inner right arc
+        sAngle = Math.PI / 2;
+        eAngle = 3 * Math.PI / 2;
+        c.arc(x, y, rInner, sAngle, eAngle);
 
-    //draw bottom right stem
-    c.lineTo(x, -rOuter);
+        //draw bottom right stem
+        c.lineTo(x, -rOuter);
 
-    //draw the upper outer right arc
-    sAngle = eAngle;
-    eAngle = Math.PI + outerAngle;
-    c.arc(x, y, rOuter, sAngle, eAngle, true);
+        //draw the upper outer right arc
+        sAngle = eAngle;
+        eAngle = Math.PI + outerAngle;
+        c.arc(x, y, rOuter, sAngle, eAngle, true);
 
-    //draw the upper outer right arc
-    sAngle = (2 * Math.PI) - outerAngle;
-    eAngle = 3 * Math.PI / 2;
-    c.arc(-x, y, rOuter, sAngle, eAngle, true);
+        //draw the upper outer right arc
+        sAngle = (2 * Math.PI) - outerAngle;
+        eAngle = 3 * Math.PI / 2;
+        c.arc(-x, y, rOuter, sAngle, eAngle, true);
 
-    //draw top left stem
-    c.lineTo(-x, -rInner);
+        //draw top left stem
+        c.lineTo(-x, -rInner);
 
-    //draw inner left arc
-    sAngle = eAngle;
-    eAngle = Math.PI / 2;
+        //draw inner left arc
+        sAngle = eAngle;
+        eAngle = Math.PI / 2;
 
-    c.arc(-x, y, rInner, sAngle, eAngle);
+        c.arc(-x, y, rInner, sAngle, eAngle);
 
-    //draw bottom left stem
-    c.lineTo(-x, rOuter);
+        //draw bottom left stem
+        c.lineTo(-x, rOuter);
 
-    //Draw the E//
-    drawE = function (x, y) {
+        //Draw the E//
+        drawE = function (x, y) {
 
-        c.moveTo(x, rOuter);
+            c.moveTo(x, rOuter);
 
-        //outer arc
-        c.arc(x, 0, rOuter, Math.PI / 2, 3 * Math.PI / 2);
+            //outer arc
+            c.arc(x, 0, rOuter, Math.PI / 2, 3 * Math.PI / 2);
 
-        //top stem
-        c.lineTo(x, -rInner);
+            //top stem
+            c.lineTo(x, -rInner);
 
-        //inner upper arc
-        c.arc(x, 0, rInner, 3 * Math.PI / 2, Math.PI + Math.atan(1/5), true);
+            //inner upper arc
+            c.arc(x, 0, rInner, 3 * Math.PI / 2, Math.PI + Math.atan(1/5), true);
 
-        //crossbar top
-        y = y - (h / 14);
-        x = 6 * h / 7; // = w / 2 - (1 / 14) * h;
-        c.lineTo(x, y);
+            //crossbar top
+            y = y - (h / 14);
+            x = 6 * h / 7; // = w / 2 - (1 / 14) * h;
+            c.lineTo(x, y);
 
-        //crossbar down
-        y += (1 / 7) * h;
-        c.lineTo(x, y);
+            //crossbar down
+            y += (1 / 7) * h;
+            c.lineTo(x, y);
 
-        //crossbar bottom
-        x = (13 - (2 * Math.sqrt(6))) * (h / 14);
-        y= 1/ 14 * h;
-        c.lineTo(x, y);
+            //crossbar bottom
+            x = (13 - (2 * Math.sqrt(6))) * (h / 14);
+            y= 1/ 14 * h;
+            c.lineTo(x, y);
 
-        //inner lower arc
-        x = 13 * (h / 14);
-        c.arc(x, 0, rInner, Math.PI -Math.atan(1/5), Math.PI / 2, true);
+            //inner lower arc
+            x = 13 * (h / 14);
+            c.arc(x, 0, rInner, Math.PI -Math.atan(1/5), Math.PI / 2, true);
 
-        //bottom stem
-        c.lineTo(x, rOuter);
+            //bottom stem
+            c.lineTo(x, rOuter);
 
-    };
+        };
 
-    drawE(x = w / 2, 0);
-    c.scale(-1, 1);
-    drawE(x = w / 2, 0);
+        drawE(x = w / 2, 0);
+        c.scale(-1, 1);
+        drawE(x = w / 2, 0);
 
-    c.fillStyle = logo.foreground();
-    c.lineWidth = 5 * pixelRatio;
-    c.fill();
+        c.fillStyle = logo.foreground();
+        c.lineWidth = 5 * pixelRatio;
+        c.fill();
 
-    c.scale(-1, 1);
-    c.translate(-hWidth, -hHeight);
-
+        c.scale(-1, 1);
+        c.translate(-hWidth, -hHeight);
+    }
+    draw();
 </script>
 </body>
 </html>
