@@ -227,6 +227,12 @@
         c.translate(-hWidth, -hHeight);
     }
     draw();
+    logo.width.subscribe(draw);
+    logo.height.subscribe(draw);
+    logo.hasMargin.subscribe(draw);
+    logo.isSquare.subscribe(draw);
+    logo.background.subscribe(draw);
+    logo.foreground.subscribe(draw);
 </script>
 </body>
 </html>
