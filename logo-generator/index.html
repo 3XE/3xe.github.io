@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>3XE Logo Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+<link
+  href='http://cdn.3xe.uk/fonts/Cabin.css'
+  rel='stylesheet' type='text/css'>
+<style>
+    body {
+        background-color: #eee;
+        background-image: linear-gradient(45deg, #e3e3e3 25%, transparent 25%, transparent 75%, #e3e3e3 75%, #e3e3e3),
+        linear-gradient(45deg, #e3e3e3 25%, transparent 25%, transparent 75%, #e3e3e3 75%, #e3e3e3);
+        background-size:20px 20px;
+        background-position:0 0, 10px 10px;
+        font-family: 'Cabin', sans-serif;
+    }
+    #options {
+        background: #333;
+        margin: 1em auto 1em;
+        max-width:600px;
+        padding: 1em;
+        border-radius:1px;
+        color:#fefefe;
+        border-radius: 8px;
+    }
+
+    input[type=color] {
+        background: transparent none repeat scroll 0% 0%;
+        border: medium none;
+        padding: 0px;
+        width: 30px;
+        height: 30px;
+        margin: 0;
+    }
+
+    th {
+        font-weight: normal;
+        text-align: left;
+    }
+
+    td, th {
+        padding-right:1em;
+    }
+
+    canvas {
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+</head>
+<body>
+<div id="options">
+    <form>
+        <span style="font-weight:800;">Options</span>
+        <br>
+        <table>
+            <tr>
+                <th>Foreground</th>
+                <th>Background</th>
+                <th>Width</th>
+                <th>Height</th>
+                <th>Margin</th>
+                <th>Square</th>
+            </tr>
+            <tr>
+                <td><input type="color" data-bind="value: foreground" name="foreground" value="#ffffff"></td>
+                <td><input type="color" data-bind="value: background" name="background" value="#000000"></td>
+                <td><input type="text" data-bind="value: width" placeholder="350px" size="5"></td>
+                <td><input type="text" data-bind="value: height" placeholder="350px" size="5"></td>
+                <td><input type="checkbox" data-bind="checked: hasMargin"></td>
+                <td><input type="checkbox" data-bind="checked: isSquare"></td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
+</div>
+<script>
+
+    var Logo = function () {
+
+        var self = this;
+        self.width  = ko.observable(0);
+        self.height = ko.observable(350);
+        self.hasMargin  = ko.observable(true);
+        self.isSquare   = ko.observable(true);
+        self.background = ko.observable('black');
+        self.foreground = ko.observable('#aaccff');
+
+    };
+
+    var logo = new Logo();
+
+    ko.applyBindings(logo, document.body);
+
+    var canvas = document.createElement('canvas');
+
+    var height, width;
+    var c, w, h, rOuter, rInner, x, y, r, sAngle, eAngle;
+
+    height = logo.height(); //canvas height
+    h = height * (logo.hasMargin() ? (7/9) : 1); //character height
+
+    width  = (h * 2) - (h / 7) + (logo.hasMargin() ? ((height * 2) / 9) : 0);
+    w = 2 * h - h / 7;
+
+    canvas.width  = width;
+    canvas.height = logo.isSquare() ? width : height;
+
+    document.body.appendChild(canvas);
+
+    c = canvas.getContext('2d');
+
+    c.fillStyle = logo.background();
+    c.fillRect(0, 0, canvas.width, canvas.height);
+
+    var pixelRatio = 1,
+        hHeight = c.canvas.height >> 1,
+        hWidth = c.canvas.width >> 1;
+
+
+    rOuter = h / 2;
+    rInner = 5 / 14 * h; // = ((5/7) * h / 2)
+    outerAngle = Math.acos(6/7);
+
+    //move to the centre of the canvas
+    c.save();
+    c.translate(hWidth, hHeight);
+
+    //Draw the X//
+    //draw the lower outer left arc
+    x      = -(3 * h / 7);
+    y      = 0;
+    sAngle = Math.PI / 2;
+    eAngle = outerAngle;
+
+    c.beginPath();
+    c.arc(x, y, rOuter, sAngle, eAngle, true);
+
+    //draw the lower outer right arc
+    sAngle = Math.PI - outerAngle;
+    eAngle = Math.PI / 2;
+
+    c.arc(-x, y, rOuter, sAngle, eAngle, true);
+
+    //draw bottom right stem
+    x = rOuter - (h / 14);
+    c.lineTo(x, rInner);
+
+    //draw inner right arc
+    sAngle = Math.PI / 2;
+    eAngle = 3 * Math.PI / 2;
+    c.arc(x, y, rInner, sAngle, eAngle);
+
+    //draw bottom right stem
+    c.lineTo(x, -rOuter);
+
+    //draw the upper outer right arc
+    sAngle = eAngle;
+    eAngle = Math.PI + outerAngle;
+    c.arc(x, y, rOuter, sAngle, eAngle, true);
+
+    //draw the upper outer right arc
+    sAngle = (2 * Math.PI) - outerAngle;
+    eAngle = 3 * Math.PI / 2;
+    c.arc(-x, y, rOuter, sAngle, eAngle, true);
+
+    //draw top left stem
+    c.lineTo(-x, -rInner);
+
+    //draw inner left arc
+    sAngle = eAngle;
+    eAngle = Math.PI / 2;
+
+    c.arc(-x, y, rInner, sAngle, eAngle);
+
+    //draw bottom left stem
+    c.lineTo(-x, rOuter);
+
+    //Draw the E//
+    drawE = function (x, y) {
+
+        c.moveTo(x, rOuter);
+
+        //outer arc
+        c.arc(x, 0, rOuter, Math.PI / 2, 3 * Math.PI / 2);
+
+        //top stem
+        c.lineTo(x, -rInner);
+
+        //inner upper arc
+        c.arc(x, 0, rInner, 3 * Math.PI / 2, Math.PI + Math.atan(1/5), true);
+
+        //crossbar top
+        y = y - (h / 14);
+        x = 6 * h / 7; // = w / 2 - (1 / 14) * h;
+        c.lineTo(x, y);
+
+        //crossbar down
+        y += (1 / 7) * h;
+        c.lineTo(x, y);
+
+        //crossbar bottom
+        x = (13 - (2 * Math.sqrt(6))) * (h / 14);
+        y= 1/ 14 * h;
+        c.lineTo(x, y);
+
+        //inner lower arc
+        x = 13 * (h / 14);
+        c.arc(x, 0, rInner, Math.PI -Math.atan(1/5), Math.PI / 2, true);
+
+        //bottom stem
+        c.lineTo(x, rOuter);
+
+    };
+
+    drawE(x = w / 2, 0);
+    c.scale(-1, 1);
+    drawE(x = w / 2, 0);
+
+    c.fillStyle = logo.foreground();
+    c.lineWidth = 5 * pixelRatio;
+    c.fill();
+
+    c.scale(-1, 1);
+    c.translate(-hWidth, -hHeight);
+
+</script>
+</body>
+</html>
