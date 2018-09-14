@@ -92,24 +92,31 @@
     var logo = new Logo();
 
     ko.applyBindings(logo, document.body);
-
-    var canvas = document.createElement('canvas');
-
-    var height, width;
-    var c, w, h, rOuter, rInner, x, y, r, sAngle, eAngle;
-
-    height = logo.height(); //canvas height
-    h = height * (logo.hasMargin() ? (7/9) : 1); //character height
-
-    width  = (h * 2) - (h / 7) + (logo.hasMargin() ? ((height * 2) / 9) : 0);
-    w = 2 * h - h / 7;
-
-    canvas.width  = width;
-    canvas.height = logo.isSquare() ? width : height;
-
-    document.body.appendChild(canvas);
-
     draw = function () {
+      
+      var canvas = document.createElement('canvas');
+
+      var height, width;
+      var c, w, h, rOuter, rInner, x, y, r, sAngle, eAngle, canvases, oldCanvas;
+
+      height = logo.height(); //canvas height
+      h = height * (logo.hasMargin() ? (7/9) : 1); //character height
+
+      width  = (h * 2) - (h / 7) + (logo.hasMargin() ? ((height * 2) / 9) : 0);
+      w = 2 * h - h / 7;
+
+      canvas.width  = width;
+      canvas.height = logo.isSquare() ? width : height;
+
+      canvases = document.getElementsByTagName('canvas');
+
+      if (canvases.length) {
+          oldCanvas = canvases[0];
+          oldCanvas.parentNode.removeChild(oldCanvas);
+      }
+
+      document.body.appendChild(canvas);
+
         c = canvas.getContext('2d');
 
         c.fillStyle = logo.background();
