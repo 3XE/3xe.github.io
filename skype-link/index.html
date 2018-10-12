@@ -5,8 +5,12 @@
     </head>
 <body>
     <script type="text/javascript">
-        var name = window.location.hash.substr(1);
-        document.writeln(name);
+        var href = 'skype:' + window.location.hash.substr(1);
+        var a    = document.createElement('a');
+        var text = document.createTextNode(href);
+        a.href = href;
+        a.appendChild(text);
+        document.body.appendChild(a);
     </script>
 </body>
 </html>
