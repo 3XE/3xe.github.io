@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Days Countdown Timer</title>
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="
+        A simple timer that counts down in days. To use,
+        set the URL hash value to a target date in
+        #YYYY-MM-DD format.
+    ">
+    <style>
+    body {
+      background: black;
+      color: red;
+      text-align: center;
+      font-family: monospace;
+    }
+
+    #countdown {
+      font-size: 33vw;
+    }
+
+    #help {
+      font-size: 2em;
+    }
+    </style>
+</head>
+<body>
+    <div id="countdown">
+    </div>
+    <div id="help"></div>
+    <script>
+        var help, date, today, target, remaining;
+        help = document.head.querySelector("meta[name='description']").content;
+        if (document.location.hash.length !== 11) {
+            document.getElementById('help').innerHTML = help;
+        } else {
+            date   = (document.location.hash.substring(1)).split('-');
+            today  = (new Date()).setHours(0,0,0,0);
+            target = new Date(date[0], date[1] - 1, date[2]);
+            remaining = parseInt((target - today) / 86400000);
+
+            document.getElementById('countdown').innerHTML = remaining;
+            document.title = remaining;
+            window.setTimeout(function () {location.reload();}, 60000);
+        }
+    </script>
+</body>
+</html>
