@@ -12,7 +12,7 @@
     <style>
     body {
       background: black;
-      color: red;
+      color: pink;
       text-align: center;
       font-family: monospace;
     }
@@ -26,11 +26,14 @@
     }
     </style>
 </head>
-<body>
+<body onhashchange="run()">
     <div id="countdown">
     </div>
     <div id="help"></div>
     <script>
+        function run () {
+
+
         var help, date, today, target, remaining;
         help = document.head.querySelector("meta[name='description']").content;
         if (document.location.hash.length !== 11) {
@@ -45,6 +48,8 @@
             document.title = remaining;
             window.setTimeout(function () {location.reload();}, 60000);
         }
+}
+run();
     </script>
 </body>
 </html>
