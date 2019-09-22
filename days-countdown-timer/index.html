@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Days Countdown Timer</title>
     <meta name="theme-color" content="#000000">
@@ -10,46 +10,70 @@
         #YYYY-MM-DD format.
     ">
     <style>
-    body {
-      background: black;
-      color: #f0f;
-      text-align: center;
-      font-family: monospace;
-    }
+        body {
+            background: black;
+            color: #f0f;
+            text-align: center;
+            font-family: monospace;
+        }
 
-    #countdown {
-      font-size: 33vw;
-    }
+        #countdown {
+            font-size: 33vw;
+        }
 
-    #help {
-      font-size: 2em;
-    }
+        #help {
+            font-size: 2em;
+        }
     </style>
 </head>
-<body onhashchange="run()">
-    <div id="countdown">
-    </div>
+
+<body onhashchange="updateText()">
+    <div id="countdown" title="Click to change colour"></div>
     <div id="help"></div>
     <script>
-        function run () {
+        function updateText() {
+            var help, date, today, target, remaining;
+            help = document.head.querySelector("meta[name='description']").content;
 
-
-        var help, date, today, target, remaining;
-        help = document.head.querySelector("meta[name='description']").content;
-        if (document.location.hash.length !== 11) {
-            document.getElementById('help').innerHTML = help;
-        } else {
-            date   = (document.location.hash.substring(1)).split('-');
-            today  = (new Date()).setHours(0,0,0,0);
-            target = new Date(date[0], date[1] - 1, date[2]);
-            remaining = parseInt((target - today) / 86400000);
-
-            document.getElementById('countdown').innerHTML = remaining;
-            document.title = remaining;
-            window.setTimeout(function () {location.reload();}, 60000);
+            if (document.location.hash.length !== 11) {
+                document.getElementById('help').innerHTML = help;
+            } else {
+                date = (document.location.hash.substring(1)).split('-');
+                today = (new Date()).setHours(0, 0, 0, 0);
+                target = new Date(date[0], date[1] - 1, date[2]);
+                remaining = parseInt((target - today) / 86400000);
+                
+                document.getElementById('help').innerHTML = '';
+                document.getElementById('countdown').innerHTML = remaining;
+                document.title = remaining;
+                window.setTimeout(function () { location.reload(); }, 60000);
+            } 
         }
-}
-run();
+
+        function randomiseColour() {
+            var r = Math.random() * 255;
+            var g = Math.random() * 255;
+            var b = Math.random() * 255;
+            var colour;
+
+            if ((r + g + b) < 255) { //ensure minimum 33% luminosity
+                changeColour();
+            } else {
+                colour = 'rgb(' + [r,g,b].join(',') + ')';
+                document.cookie = colour;
+                document.body.style.color = colour;
+            }
+        }
+
+        function setColorFromCookie() {
+            if (document.cookie.length > 0) {            
+                document.body.style.color = document.cookie;
+            }
+        }
+        
+        document.addEventListener('click', randomiseColour);
+        setColorFromCookie();
+        updateText();
     </script>
 </body>
 </html>
